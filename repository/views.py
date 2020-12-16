@@ -6,12 +6,14 @@ from django.http import HttpResponse
 
 # Create your views here.
 import pandas as pd
-import riak
+
 import json
-from models import StockRepository
+from models import StockRepository, UserRepository
 
 import os
 from django.conf import settings
+
+from db import myClient
 
 
 def process_data():
@@ -29,13 +31,11 @@ def process_data():
 
 
 def seed(data):
-    myClient = riak.RiakClient(
-        pbc_port=8087, host="coordinator", protocol='pbc')
-    # myClient = riak.RiakClient(pb_port=8087, protocol='pbc')
-    # myClient = riak.RiakClient(pb_port=8087)
-    # myClient = riak.RiakClient(pb_port=8087)
-    stocks = myClient.bucket('stocks')
+
+    # stocks = myClient.bucket('stocks')
+    # users = myClient.bucket('users')
     stockRepo = StockRepository(myClient)
+    userRepo = UserRepository(myClient)
     # print(stockRepo)
     for i, row in data.iterrows():
 
@@ -49,12 +49,17 @@ def seed(data):
         stock_data.append(stockRepo.get(name))
         # print(stockRepo.get(name))
 
-    # TODO
-    # SEEDING FOR USER
+    user_data = []
+    # Init user
+    username_admin = "admin"
+    password_admin = "admin"
+    userRepo.add(username_admin, password_admin)
+    user_data.append(json.loads(userRepo.get(username_admin)))
 
     # print(stock_data)
     datas = {}
     datas['stocks'] = stock_data
+    datas['users'] = user_data
 
     return json.dumps(datas)
 
