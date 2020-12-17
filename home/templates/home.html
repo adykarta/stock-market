@@ -1,0 +1,31 @@
+{% extends 'layout.html' %} {% load static %} {% block body %}
+<script>
+  if (localStorage.getItem("username") == null) {
+    window.location.href = "/registration/login";
+  }
+  function handleLogout() {
+    const username = localStorage.getItem("username");
+    const formData = new FormData();
+    formData.append("username", username);
+    $.ajax({
+      url: "/registration/logout",
+      type: "POST",
+      processData: false,
+      contentType: false,
+      data: formData,
+      success: function (result) {
+        if (result.message == "success") {
+          localStorage.removeItem("username");
+          window.location.href = "/registration/login";
+        }
+      },
+    });
+  }
+</script>
+<h1 id="username"></h1>
+<button onclick="handleLogout()">logout</button>
+<script>
+  const username = localStorage.getItem("username");
+  document.getElementById("username").innerHTML = "Hello," + username;
+</script>
+{% endblock %}

@@ -54,7 +54,8 @@ def seed(data):
     username_admin = "admin"
     password_admin = "admin"
     userRepo.add(username_admin, password_admin)
-    user_data.append(json.loads(userRepo.get(username_admin)))
+    usr = json.loads(userRepo.get(username_admin))
+    user_data.append(usr)
 
     # print(stock_data)
     datas = {}
@@ -68,4 +69,5 @@ def index(request):
     if request.method == 'GET':
         datas = process_data()
         print(datas)
+
         return HttpResponse(process_data())

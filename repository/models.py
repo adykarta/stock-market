@@ -88,6 +88,11 @@ class SessionRepository:
         riak_obj = self.client.bucket(self.BUCKET).get(username)
         return riak_obj.data
 
+    def delete(self, username):
+        riak_obj = self.client.bucket(self.BUCKET).get(username)
+        riak_obj.delete()
+        return
+
 
 class TransactionRepository:
     BUCKET = 'Transactions'
