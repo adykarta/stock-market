@@ -9,6 +9,8 @@ services:
     depends_on:
       - coordinator
       - member
+    environment:
+      - PYTHONUNBUFFERED=1
   coordinator:
     image: basho/riak-kv
     ports:
