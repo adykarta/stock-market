@@ -22,10 +22,25 @@
     });
   }
 </script>
-<h1 id="username"></h1>
-<button onclick="handleLogout()">logout</button>
+<div class="d-flex p-2 bd-highlight">
+  <h1 id="username"></h1>
+  <button class="btn btn-danger" onclick="handleLogout()">Log out</button>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Harga</th>
+      <th>Nama</th>
+      <th>Jumlah</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+
+  </tbody>
+</table>
 <script>
   const username = localStorage.getItem("username");
-  document.getElementById("username").innerHTML = "Hello," + username;
+  document.getElementById("username").innerHTML = "Hello, " + username + "!";
 </script>
 {% endblock %}
