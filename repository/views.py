@@ -18,14 +18,13 @@ from db import myClient
 
 def process_data():
     dataset = open(os.path.join(settings.BASE_DIR,
-                                './repository/data/bovespa.csv'))
-    df = pd.read_csv(dataset)
+                                './repository/data/nse.csv'))
+    new_data = pd.read_csv(dataset)
 
-    new_data = df.query('Date == "27/9/2016"')
-    # print(new_data)
     processed_data = new_data.drop(
-        columns=["Date", "High", "Low", "Close", "Adj Close"])
-
+        columns=["SERIES", "HIGH", "LOW", "CLOSE", "LAST", "PREVCLOSE", "TOTTRDVAL", "TIMESTAMP", "TOTALTRADES", "ISIN"])
+    processed_data = processed_data.dropna()
+    processed_data = processed_data.head(1000)
     # print(processed_data)
     return seed(processed_data)
 
@@ -38,16 +37,16 @@ def seed(data):
     userRepo = UserRepository(myClient)
     # print(stockRepo)
     for i, row in data.iterrows():
-
-        name = row['Ticker']
-        price = row['Open']
-        quantity = row['Volume']
+        name = row['SYMBOL']
+        price = row['OPEN']
+        quantity = row['TOTTRDQTY']
         stockRepo.add(name, quantity, price)
+
     stock_data = []
     for i, row in data.iterrows():
-        name = row['Ticker']
-        stock_data.append(stockRepo.get(name))
-        # print(stockRepo.get(name))
+        name = row['SYMBOL']
+        stock_data.append(json.loads(stockRepo.get(name)))
+    # print(stockRepo.get(name))
 
     user_data = []
     # Init user
@@ -68,6 +67,5 @@ def seed(data):
 def index(request):
     if request.method == 'GET':
         datas = process_data()
-        print(datas)
 
         return HttpResponse(process_data())
