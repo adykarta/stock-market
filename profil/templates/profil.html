@@ -1,0 +1,64 @@
+{% extends 'layout.html' %} {% load static %} {% block body %}
+<script>
+  if (localStorage.getItem("username") == null) {
+    window.location.href = "/registration/login";
+  }
+  function handleLogout() {
+    const username = localStorage.getItem("username");
+    const formData = new FormData();
+    formData.append("username", username);
+    $.ajax({
+      url: "/registration/logout",
+      type: "POST",
+      processData: false,
+      contentType: false,
+      data: formData,
+      success: function (result) {
+        if (result.message == "success") {
+          localStorage.removeItem("username");
+          window.location.href = "/registration/login";
+        }
+      },
+    });
+  }
+</script>
+
+<div class="d-flex p-2 bd-highlight mb-3 justify-content-end">
+  <h3 id="username"></h3>
+  <a href="/"><button class="btn btn-primary ml-3">Home</button></a>
+  <button class="btn btn-danger ml-3" onclick="handleLogout()">Log out</button>
+</div>
+
+<h2>Profil</h2>
+<h4>Username: {{ uname }}</h4> 
+
+<h4>Portfolio Saham:</h4>    
+{% if daftar_saham %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Nama</th>
+        <th>Jumlah</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for data in daftar_saham %}
+      <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ data.name }}</td>
+          <td>{{ data.quantity }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table> 
+
+{% else %}
+  <h5>Anda belum pernah membeli saham.</h5>
+{% endif %}
+
+<script>
+  const username = localStorage.getItem("username");
+  document.getElementById("username").innerHTML = "Hello, " + username + "!";
+</script>
+{% endblock %}
