@@ -28,6 +28,26 @@ class StockRepository:
             print("Already created")
             return "Stock already added"
 
+    def set(self, name, quantity):
+        datas = {"name": name,
+                 "quantity": quantity,
+                 }
+        riak_obj = self.client.bucket(self.BUCKET).get(name)
+        data = json.loads(riak_obj.data)
+        prevData = data["stocks"]
+        prevData.append(datas)
+
+        data["stocks"] = prevData
+        updatedData = json.dumps(data)
+        print(updatedData)
+        riak_obj.data = updatedData
+        return riak_obj.store()
+        # print(riak_obj.data.stocks)
+        # riak_obj.data.stocks = json.dumps(prevData)
+
+        # riak_obj.data = data
+        # return riak_obj.store()
+
     def get(self, name):
         riak_obj = self.client.bucket(self.BUCKET).get(name)
         return riak_obj.data
