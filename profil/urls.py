@@ -18,6 +18,9 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
+    url(r'^get-user', views.getUser, name="getUser"),
     url(r'', views.profil, name="profil"),
+
+
 
 ]
