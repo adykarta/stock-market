@@ -29,6 +29,7 @@
 </div>
 <h2>Daftar Saham</h2>
 {% if stocks %}
+
 <table class="table">
   <thead>
     <tr>
@@ -53,6 +54,7 @@
 </table>
 {% else %}
 <h5>Belum ada saham yang terdaftar.</h5>
+
 {% endif %}
 <script>
   const username = localStorage.getItem("username");
