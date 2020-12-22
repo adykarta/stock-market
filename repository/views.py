@@ -53,6 +53,7 @@ def seed(data):
     username_admin = "admin"
     password_admin = "admin"
     userRepo.add(username_admin, password_admin)
+    userRepo.set(username_admin, "HDIL", 2)
     usr = json.loads(userRepo.get(username_admin))
     user_data.append(usr)
 
