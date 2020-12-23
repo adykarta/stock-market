@@ -1,118 +1,142 @@
 {% extends 'layout.html' %} {% load static %} {% block body %}
 <style>
-    input[type=text], select {
-      width: 100%;
-      padding: 12px 20px;
-      margin: 8px 0;
-      display: inline-block;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    
-    input[type=submit] {
-      width: 100%;
-      background-color: #4CAF50;
-      color: white;
-      padding: 14px 20px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    input[type=submit]:hover {
-      background-color: #45a049;
-    }
-    
-    #formPembelian {
-      border-radius: 5px;
-      background-color: #f2f2f2;
-      padding: 20px;
-    }
-    </style>
+  input[type="text"],
+  select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
 
-  <div class="d-flex p-2 bd-highlight mb-3 justify-content-end">
-    <h3 id="username"></h3>
-    <a href="/"><button class="btn btn-primary ml-3">Home</button></a>
-    <button class="btn btn-danger ml-3" onclick="handleLogout()">Log out</button>
-  </div>
+  input[type="submit"] {
+    width: 100%;
+    background-color: #4caf50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 
-  <h2>Detail Stock</h2>
-  <div id="formPembelian">
-      <form action= "post-beli" method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="namaSaham">Nama User:</label>
-            <input type="text" id="usernama" name="usernama" readonly><br>
-        </div>
-        <div class="form-group">
-            <label for="namaSaham">Nama Saham:</label>
-            <input type="text" id="namaSaham" value="{{stock.name}}" name="namaSaham" readonly><br>
-        </div>
-        <div class="form-group">
-            <label for="hargaSaham">Harga Saham</label>
-            <input type="text" id="hargaSaham" value="{{stock.price}}" name="hargaSaham" readonly><br>
-        </div>
-        <div class="form-group">
-            <label for="jumlahSaham">Jumlah Saham Saat Ini</label>
-            <input type="text" id="jumlahSaham" value="{{stock.quantity}}" name="jumlahSaham" readonly><br>
-        </div>
-        <div class="form-group">
-            <label for="jumlahBeli">Jumlah Saham yang Ingin Dibeli</label>
-            <input type="text" id="jumlahBeli" placeholder="Jumlah Yang ingin Dibeli" name="jumlahBeli"><br>
-        </div>
-          <input id="btnSubmit" type="submit" value="Beli">
-      </form>
-  </div>
-  
-  <script>
-    if (localStorage.getItem("username") == null) {
-      window.location.href = "/registration/login";
-    }
-  
-    function handleLogout() {
-      const username = localStorage.getItem("username");
-      const formData = new FormData();
-      formData.append("username", username);
-      $.ajax({
-        url: "/registration/logout",
-        type: "POST",
-        processData: false,
-        contentType: false,
-  
-        data: formData,
-        success: function (result) {
-          if (result.message == "success") {
-            localStorage.removeItem("username");
-            window.location.href = "/registration/login";
-          }
-        },
-      });
-    }
+  input[type="submit"]:hover {
+    background-color: #45a049;
+  }
+
+  #formPembelian {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+</style>
+
+<div class="d-flex p-2 bd-highlight mb-3 justify-content-end">
+  <h3 id="username"></h3>
+  <a href="/"><button class="btn btn-primary ml-3">Home</button></a>
+  <button class="btn btn-danger ml-3" onclick="handleLogout()">Log out</button>
+</div>
+
+<h2>Detail Stock</h2>
+<div id="formPembelian">
+  <form action="post-beli" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="namaSaham">Nama User:</label>
+      <input type="text" id="usernama" name="usernama" readonly /><br />
+    </div>
+    <div class="form-group">
+      <label for="namaSaham">Kode Saham:</label>
+      <input
+        type="text"
+        id="namaSaham"
+        value="{{stock.name}}"
+        name="namaSaham"
+        readonly
+      /><br />
+    </div>
+    <div class="form-group">
+      <label for="hargaSaham">Harga Saham per lot</label>
+      <input
+        type="text"
+        id="hargaSaham"
+        value="{{stock.price}}"
+        name="hargaSaham"
+        readonly
+      /><br />
+    </div>
+    <div class="form-group">
+      <label for="jumlahSaham">Jumlah Saham Saat yang tersedia</label>
+      <input
+        type="text"
+        id="jumlahSaham"
+        value="{{stock.quantity}}"
+        name="jumlahSaham"
+        readonly
+      /><br />
+    </div>
+    <div class="form-group">
+      <label for="jumlahBeli">Jumlah Saham yang Ingin Dibeli</label>
+      <input
+        type="text"
+        id="jumlahBeli"
+        placeholder="Jumlah Yang ingin Dibeli"
+        name="jumlahBeli"
+      /><br />
+    </div>
+    <input id="btnSubmit" type="submit" value="Beli" />
+  </form>
+</div>
+
+<script>
+  if (localStorage.getItem("username") == null) {
+    window.location.href = "/registration/login";
+  }
+
+  function handleLogout() {
     const username = localStorage.getItem("username");
-    document.getElementById("username").innerHTML = "Hello, " + username + "!";
-    document.getElementById("usernama").value = username;
+    const formData = new FormData();
+    formData.append("username", username);
+    $.ajax({
+      url: "/registration/logout",
+      type: "POST",
+      processData: false,
+      contentType: false,
 
-    // function beliStock(){
-    //   var form = $("beliForm")[0];
-    //   var data = new FormData(form)
-    //   data.append('username', username)
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "detailStock/post-beli",
-    //     data: data,
-    //     processData: false,
-    //     contentType: false,
-    //     cache: false,
-    //     success: function(data){
-    //       $("#btnSubmit").prop("disabled", false);
-    //     },
-    //     error: function(e){
-    //       console.log("ERROR: ", e);
-    //       $("#btnSubmit").prop("disabled", false);
-    //     }
-    //   });
-    // }
-  </script>
+      data: formData,
+      success: function (result) {
+        if (result.message == "success") {
+          localStorage.removeItem("username");
+          window.location.href = "/registration/login";
+        }
+      },
+    });
+  }
+  const username = localStorage.getItem("username");
+  document.getElementById("username").innerHTML = "Hello, " + username + "!";
+  document.getElementById("usernama").value = username;
+
+  // function beliStock(){
+  //   var form = $("beliForm")[0];
+  //   var data = new FormData(form)
+  //   data.append('username', username)
+  //   $.ajax({
+  //     type: "POST",
+  //     url: "detailStock/post-beli",
+  //     data: data,
+  //     processData: false,
+  //     contentType: false,
+  //     cache: false,
+  //     success: function(data){
+  //       $("#btnSubmit").prop("disabled", false);
+  //     },
+  //     error: function(e){
+  //       console.log("ERROR: ", e);
+  //       $("#btnSubmit").prop("disabled", false);
+  //     }
+  //   });
+  // }
+</script>
 {% endblock %}

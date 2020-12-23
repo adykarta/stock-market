@@ -20,9 +20,8 @@ def getUser(request):
         data = json.loads(userRepo.get(username))
         uname = data.get("username")
         stocks = data.get("stocks")
-        print(username)
-        print(stocks)
-        return JsonResponse({"message": "success", 'uname': uname, 'daftar_saham': stocks}, safe=False)
+        time = data.get("buy_time")
+        return JsonResponse({"message": "success", 'uname': uname, 'daftar_saham': stocks, "buy_time": time}, safe=False)
     else:
         return JsonResponse({"message": "failed"},  safe=False)
 
