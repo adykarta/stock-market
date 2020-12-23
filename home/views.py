@@ -20,12 +20,14 @@ def home(request):
 def get_all_data():
     stockRepo = StockRepository(myClient)
     response = requests.get('http://coordinator:8098/buckets/Stocks/keys?keys=true')
-    keys = response.json()[u'keys']
+    dumpData = json.dumps(response.json())
+    keys = json.loads(dumpData)['keys']
     allStocks = []
 
     for x in keys:
         stock_obj = json.loads(stockRepo.get(x))
         allStocks.append(stock_obj)
         
+    # print(response.json())
     return allStocks
     

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 import json
+import pytz
 
 # Create your models here.
 
@@ -28,6 +29,17 @@ class StockRepository:
             print("Already created")
             return "Stock already added"
 
+    def set(self, name, quantity):
+
+        riak_obj = self.client.bucket(self.BUCKET).get(name)
+        data = json.loads(riak_obj.data)
+
+        data["quantity"] = quantity
+        updatedData = json.dumps(data)
+
+        riak_obj.data = updatedData
+        return riak_obj.store()
+
     def get(self, name):
         riak_obj = self.client.bucket(self.BUCKET).get(name)
         return riak_obj.data
@@ -42,7 +54,8 @@ class UserRepository:
     def add(self, username, password):
         datas = {"username": username,
                  "password": password,
-                 "stocks": []
+                 "stocks": [],
+
                  }
         datas = json.dumps(datas)
         if(self.client.bucket(self.BUCKET).get(username).data == None):
@@ -56,9 +69,10 @@ class UserRepository:
             print("Already created")
             return "User already added"
 
-    def set(self, username, name, quantity):
+    def set(self, username, name, quantity, time):
         datas = {"name": name,
                  "quantity": quantity,
+                 "buy_time": time
                  }
         riak_obj = self.client.bucket(self.BUCKET).get(username)
         data = json.loads(riak_obj.data)
@@ -67,14 +81,9 @@ class UserRepository:
 
         data["stocks"] = prevData
         updatedData = json.dumps(data)
-        print(updatedData)
+
         riak_obj.data = updatedData
         return riak_obj.store()
-        # print(riak_obj.data.stocks)
-        # riak_obj.data.stocks = json.dumps(prevData)
-
-        # riak_obj.data = data
-        # return riak_obj.store()
 
     def get(self, username):
         riak_obj = self.client.bucket(self.BUCKET).get(username)

@@ -14,6 +14,8 @@ import os
 from django.conf import settings
 
 from db import myClient
+import datetime
+import pytz
 
 
 def process_data():
@@ -53,7 +55,11 @@ def seed(data):
     username_admin = "admin"
     password_admin = "admin"
     userRepo.add(username_admin, password_admin)
-    userRepo.set(username_admin, "HDIL", 2)
+    tz = pytz.timezone('Asia/Jakarta')
+    now_utc = datetime.datetime.now(tz=tz)
+    print(now_utc)
+    waktuString = str(now_utc)
+    userRepo.set(username_admin, "HDIL", 2, waktuString)
     usr = json.loads(userRepo.get(username_admin))
     user_data.append(usr)
 

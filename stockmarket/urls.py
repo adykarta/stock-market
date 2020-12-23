@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^profil/', include('profil.urls')),
     url(r'^repository/', include('repository.urls')),
     url(r'^registration/', include('registration.urls')),
-
+    url(r'^detailStock/', include('detailStock.urls')),
 ]

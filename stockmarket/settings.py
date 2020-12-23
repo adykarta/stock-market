@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'repository',
     'registration',
     'home',
-    'profil'
+    'profil',
+    'detailStock'
 ]
 
 MIDDLEWARE = [
